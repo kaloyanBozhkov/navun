@@ -27,6 +27,17 @@ export default async function FriendsPage() {
       <div className="flex">
         {/* Main feed */}
         <div className="mx-auto max-w-2xl flex-1 space-y-6 px-4 py-4">
+          {/* Desktop title row */}
+          <div className="hidden items-center justify-between md:flex">
+            <h1 className="text-2xl font-bold">Приятели</h1>
+            <Link
+              href="/add-friend"
+              className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-white"
+            >
+              <UserPlus size={16} /> Добави приятели
+            </Link>
+          </div>
+
           {friendsWithEvents.map((friend) => (
             <div key={friend.id} className="space-y-3">
               {/* Friend header row */}

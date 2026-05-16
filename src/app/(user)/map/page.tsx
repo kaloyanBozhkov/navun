@@ -1,8 +1,8 @@
-export default function MapPage() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <h1 className="text-2xl font-bold">Map</h1>
-      <p className="mt-2 text-gray-600">Event map coming soon</p>
-    </main>
-  );
+import { getEvents } from "@/server/queries/event/getEvents.query";
+import { MapPageClient } from "./MapPageClient";
+
+export default async function MapPage() {
+  const events = await getEvents();
+
+  return <MapPageClient events={events} />;
 }

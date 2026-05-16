@@ -1,8 +1,18 @@
-export default function HomePage() {
+import { getEvents } from "@/server/queries/event/getEvents.query";
+import { HeroEvent } from "@/app/_components/molecules/HeroEvent";
+import { EventFeed } from "@/app/_components/organisms/EventFeed";
+
+export default async function HomePage() {
+  const events = await getEvents();
+  const [featured, ...rest] = events;
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <h1 className="text-4xl font-bold">Навън</h1>
-      <p className="mt-4 text-lg text-gray-600">Discover events in Varna</p>
+    <main className="min-h-screen p-4 md:p-8">
+      <div className="mx-auto max-w-6xl space-y-6">
+        {featured && <HeroEvent event={featured} />}
+
+        <EventFeed events={rest} />
+      </div>
     </main>
   );
 }

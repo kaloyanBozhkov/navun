@@ -1,72 +1,138 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-client";
-import { getFriends } from "@/server/queries/friendship/getFriends.query";
-import { getFriendsEvents } from "@/server/queries/event/getFriendsEvents.query";
-import { EventCard } from "@/app/_components/molecules/EventCard";
+import { getFriendsWithEvents } from "@/server/queries/friendship/getFriendsWithEvents.query";
+import { getAvatarColor } from "@/utils/avatarColor";
 import Link from "next/link";
+import { UserPlus, ChevronRight } from "lucide-react";
 
 export default async function FriendsPage() {
   const session = await getSession();
   if (!session?.user?.id) redirect("/login");
 
-  const friends = await getFriends(session.user.id);
-  const friendIds = friends.map((f) => f.id);
-  const events = await getFriendsEvents(friendIds);
+  const friendsWithEvents = await getFriendsWithEvents(session.user.id);
 
   return (
-    <main className="min-h-screen p-4 md:p-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-6 md:flex-row">
-          {/* Friends Sidebar */}
-          <aside className="w-full shrink-0 space-y-3 md:w-64">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold">Приятели ({friends.length})</h2>
-              <Link href="/add-friend" className="text-sm text-primary hover:underline">
-                Добави
-              </Link>
-            </div>
-            {friends.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Все още нямаш приятели.{" "}
-                <Link href="/add-friend" className="text-primary underline">
-                  Добави!
-                </Link>
-              </p>
-            ) : (
-              <ul className="space-y-2">
-                {friends.map((friend) => (
-                  <li key={friend.id} className="flex items-center gap-2">
-                    <div className="h-8 w-8 shrink-0 rounded-full bg-muted" />
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{friend.name}</p>
-                      {friend.username && (
-                        <p className="truncate text-xs text-muted-foreground">
-                          @{friend.username}
-                        </p>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </aside>
+    <main className="min-h-screen">
+      {/* Mobile header */}
+      <div className="flex items-center justify-between px-4 py-3 md:hidden">
+        <h1 className="text-xl font-bold">Приятели</h1>
+        <Link
+          href="/add-friend"
+          className="flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-sm font-medium text-white"
+        >
+          <UserPlus size={14} /> Добави
+        </Link>
+      </div>
 
-          {/* Friends Event Feed */}
-          <div className="flex-1 space-y-4">
-            <h1 className="text-2xl font-bold">Приятели</h1>
-            {events.length === 0 ? (
-              <p className="py-12 text-center text-muted-foreground">
-                Все още няма събития от приятели. Събитията, които интересуват приятелите ти, ще се появят тук.
-              </p>
-            ) : (
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                {events.map((event) => (
-                  <EventCard key={event.id} event={event} />
-                ))}
+      <div className="flex">
+        {/* Main feed */}
+        <div className="mx-auto max-w-2xl flex-1 space-y-6 px-4 py-4">
+          {friendsWithEvents.map((friend) => (
+            <div key={friend.id} className="space-y-3">
+              {/* Friend header row */}
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
+                  style={{ backgroundColor: getAvatarColor(friend.id) }}
+                >
+                  {friend.name?.[0]?.toUpperCase() ?? "?"}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">{friend.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    @{friend.username}
+                  </p>
+                </div>
               </div>
-            )}
-          </div>
+
+              {/* Event sub-cards */}
+              {friend.interests.length > 0 ? (
+                <div className="ml-[52px] space-y-2">
+                  <p className="text-xs text-muted-foreground">
+                    Има интерес към:
+                  </p>
+                  {friend.interests.map((interest) => (
+                    <Link
+                      key={interest.event.id}
+                      href={`/event/${interest.event.id}`}
+                      className="flex gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
+                    >
+                      {interest.event.image_url && (
+                        <img
+                          src={interest.event.image_url}
+                          className="h-16 w-16 shrink-0 rounded-lg object-cover"
+                          alt=""
+                        />
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">
+                          {interest.event.title}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(
+                            interest.event.starts_at
+                          ).toLocaleDateString("bg-BG", {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                        {interest.event.location && (
+                          <p className="truncate text-xs text-muted-foreground">
+                            {interest.event.location}
+                          </p>
+                        )}
+                      </div>
+                      <ChevronRight
+                        size={16}
+                        className="shrink-0 self-center text-muted-foreground"
+                      />
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="ml-[52px] text-xs text-muted-foreground">
+                  Няма нови интереси
+                </p>
+              )}
+            </div>
+          ))}
+
+          {friendsWithEvents.length === 0 && (
+            <p className="py-12 text-center text-muted-foreground">
+              Нямаш приятели все още. Добави нови!
+            </p>
+          )}
         </div>
+
+        {/* Desktop right sidebar: Online friends */}
+        <aside className="hidden w-64 shrink-0 px-4 py-4 lg:block">
+          <div className="rounded-xl border border-border bg-card p-4">
+            <h3 className="mb-3 text-sm font-semibold">Онлайн приятели</h3>
+            <div className="space-y-3">
+              {friendsWithEvents.slice(0, 5).map((friend) => (
+                <div key={friend.id} className="flex items-center gap-2">
+                  <div className="relative">
+                    <div
+                      className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white"
+                      style={{ backgroundColor: getAvatarColor(friend.id) }}
+                    >
+                      {friend.name?.[0]?.toUpperCase() ?? "?"}
+                    </div>
+                    <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-card bg-green-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{friend.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      @{friend.username}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </aside>
       </div>
     </main>
   );

@@ -1,58 +1,71 @@
 @import "tailwindcss";
 
 @theme {
+  /* Backgrounds — exact design system values */
   --color-bg-primary: #0A0E1A;
   --color-bg-secondary: #111827;
   --color-bg-card: #1A1F2E;
-  --color-bg-elevated: #242938;
+  --color-bg-elevated: #2A2F3E;
 
-  --color-text-primary: #F9FAFB;
-  --color-text-secondary: #9CA3AF;
-  --color-text-muted: #6B7280;
+  /* Text — exact design system values */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
 
-  --color-border: #2D3348;
+  /* Borders — exact design system values */
+  --color-border-subtle: #1E293B;
+  --color-border-pill: #334155;
+
+  /* Accents — exact design system values */
   --color-accent-blue: #3B82F6;
   --color-accent-blue-hover: #2563EB;
   --color-accent-green: #22C55E;
   --color-accent-orange: #F97316;
   --color-accent-red: #EF4444;
+  --color-accent-white: #FFFFFF;
 
+  /* Typography */
   --font-family-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --radius: 0.75rem;
+
+  /* Radius — exact design system values */
+  --radius-sm: 0.5rem;   /* 8px  */
+  --radius-md: 0.75rem;  /* 12px */
+  --radius-lg: 1rem;     /* 16px */
+  --radius-xl: 1.25rem;  /* 20px */
 }
 
-/* shadcn/ui CSS variable mappings — dark theme by default */
+/* shadcn/ui CSS variable mappings — aligned to design system */
 @layer base {
   :root {
-    --background: 222 47% 7%;           /* #0A0E1A */
-    --foreground: 210 40% 98%;          /* #F9FAFB */
+    --background: 222 47% 7%;           /* bg-primary    #0A0E1A */
+    --foreground: 0 0% 100%;            /* text-primary  #FFFFFF */
 
-    --card: 222 31% 14%;                /* #1A1F2E */
-    --card-foreground: 210 40% 98%;
+    --card: 222 31% 14%;                /* bg-card       #1A1F2E */
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222 31% 14%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 31% 14%;             /* bg-card       #1A1F2E */
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 217 91% 60%;             /* #3B82F6 */
+    --primary: 217 91% 60%;             /* accent-blue   #3B82F6 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 25% 18%;           /* #242938 */
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 222 47% 11%;           /* bg-secondary  #111827 */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 222 25% 18%;
-    --muted-foreground: 215 20% 65%;    /* #9CA3AF */
+    --muted: 225 19% 20%;               /* bg-elevated   #2A2F3E */
+    --muted-foreground: 215 20% 65%;    /* text-secondary #94A3B8 */
 
-    --accent: 217 91% 60%;
+    --accent: 217 91% 60%;              /* accent-blue   #3B82F6 */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;           /* #EF4444 */
+    --destructive: 0 84% 60%;           /* accent-red    #EF4444 */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 26% 24%;              /* #2D3348 */
-    --input: 222 26% 24%;
-    --ring: 217 91% 60%;
+    --border: 215 28% 17%;              /* border-subtle #1E293B */
+    --input: 215 28% 17%;               /* border-subtle #1E293B */
+    --ring: 217 91% 60%;                /* accent-blue   #3B82F6 */
 
-    --radius: 0.75rem;
+    --radius: 0.75rem;                  /* radius-md     12px    */
   }
 
   body {

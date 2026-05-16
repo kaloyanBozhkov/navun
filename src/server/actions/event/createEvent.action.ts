@@ -28,6 +28,10 @@ export async function createEventAction(input: z.input<typeof createEventSchema>
     return { success: false, error: "Only business accounts can create events" } as const;
   }
 
+  if (user.role === "BUSINESS" && !user.is_approved) {
+    return { success: false, error: "Your business account is pending approval" } as const;
+  }
+
   const parsed = createEventSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0].message } as const;

@@ -7,79 +7,96 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  name        String?
-  username    String?  @unique
-  image       String?
-  role        String   @default("USER")
-  is_approved Boolean  @default(false)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+// Enums
 
-  accounts                account[]
-  sessions                session[]
-  interests               event_interest[]
-  friendships_initiated   friendship[]         @relation("requester")
-  friendships_received    friendship[]         @relation("addressee")
-  verification_tokens     verification_token[]
-  events                  event[]
+enum Role {
+  USER
+  BUSINESS
+  ADMIN
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+// Models
+
+model user {
+  id             String    @id @default(cuid())
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  email          String    @unique
+  email_verified DateTime?
+  image          String?
+  is_approved    Boolean   @default(false)
+  name           String?
+  role           Role      @default(USER)
+  username       String?   @unique
+
+  accounts              account[]
+  events                event[]
+  friendships_initiated friendship[]         @relation("requester")
+  friendships_received  friendship[]         @relation("addressee")
+  interests             event_interest[]
+  sessions              session[]
+  verification_tokens   verification_token[]
 }
 
 model account {
   id                  String  @id @default(cuid())
-  user_id             String
-  type                String
+  access_token        String?
+  expires_at          Int?
+  id_token            String?
   provider            String
   provider_account_id String
   refresh_token       String?
-  access_token        String?
-  expires_at          Int?
-  token_type          String?
   scope               String?
-  id_token            String?
   session_state       String?
+  token_type          String?
+  type                String
 
-  user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  user    user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([provider, provider_account_id])
 }
 
 model session {
   id            String   @id @default(cuid())
-  session_token String   @unique
-  user_id       String
   expires       DateTime
+  session_token String   @unique
 
-  user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  user    user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model verification_token {
+  expires    DateTime
   identifier String
   token      String   @unique
-  expires    DateTime
-  user_id    String?
 
-  user user? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String?
+  user    user?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([identifier, token])
 }
 
 model event {
   id           String    @id @default(cuid())
-  title        String
-  description  String?
-  location     String?
-  lat          Float?
-  lng          Float?
-  starts_at    DateTime
-  ends_at      DateTime?
-  image_url    String?
-  category     String?
-  is_published Boolean   @default(false)
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
+  category     String?
+  description  String?
+  ends_at      DateTime?
+  image_url    String?
+  is_published Boolean   @default(false)
+  lat          Float?
+  lng          Float?
+  location     String?
+  starts_at    DateTime
+  title        String
 
   business_id String
   business    user             @relation(fields: [business_id], references: [id])
@@ -87,23 +104,25 @@ model event {
 }
 
 model event_interest {
-  user_id    String
-  event_id   String
   created_at DateTime @default(now())
 
-  user  user  @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  event event @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  event_id String
+  user_id  String
+  event    event  @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  user     user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, event_id])
 }
 
 model friendship {
-  requester_id String
-  addressee_id String
-  created_at   DateTime @default(now())
+  created_at   DateTime         @default(now())
+  updated_at   DateTime         @updatedAt
+  status       FriendshipStatus @default(PENDING)
 
-  requester user @relation("requester", fields: [requester_id], references: [id], onDelete: Cascade)
-  addressee user @relation("addressee", fields: [addressee_id], references: [id], onDelete: Cascade)
+  addressee_id String
+  requester_id String
+  addressee    user   @relation("addressee", fields: [addressee_id], references: [id], onDelete: Cascade)
+  requester    user   @relation("requester", fields: [requester_id], references: [id], onDelete: Cascade)
 
   @@id([requester_id, addressee_id])
 }

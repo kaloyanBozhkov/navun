@@ -11,7 +11,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
@@ -38,7 +39,11 @@
     "eslint": "^10.4.0",
     "eslint-config-next": "^16.2.6",
     "tailwindcss": "^4.3.0",
+    "tsx": "^4.22.0",
     "typescript": "^6.0.3"
+  },
+  "prisma": {
+    "seed": "pnpm exec tsx prisma/seed.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

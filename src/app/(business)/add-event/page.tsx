@@ -47,11 +47,11 @@ export default function AddEventPage() {
         <h1 className="text-2xl font-bold">Ново събитие</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input id="title" name="title" label="Title" required />
+          <Input id="title" name="title" label="Заглавие" required />
 
           <div className="flex flex-col gap-1.5">
             <label htmlFor="description" className="text-sm font-medium">
-              Description
+              Описание
             </label>
             <textarea
               id="description"
@@ -61,28 +61,28 @@ export default function AddEventPage() {
             />
           </div>
 
-          <Input id="location" name="location" label="Location" placeholder="e.g. Varna, Bulgaria" />
+          <Input id="location" name="location" label="Локация" placeholder="напр. Варна, България" />
 
           <div className="grid grid-cols-2 gap-4">
-            <Input id="lat" name="lat" label="Latitude" type="number" placeholder="43.2141" />
-            <Input id="lng" name="lng" label="Longitude" type="number" placeholder="27.9147" />
+            <Input id="lat" name="lat" label="Ширина" type="number" placeholder="43.2141" />
+            <Input id="lng" name="lng" label="Дължина" type="number" placeholder="27.9147" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Input id="startsAt" name="startsAt" label="Start Date/Time" type="datetime-local" required />
-            <Input id="endsAt" name="endsAt" label="End Date/Time" type="datetime-local" />
+            <Input id="startsAt" name="startsAt" label="Начало" type="datetime-local" required />
+            <Input id="endsAt" name="endsAt" label="Край" type="datetime-local" />
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label htmlFor="category" className="text-sm font-medium">
-              Category
+              Категория
             </label>
             <select
               id="category"
               name="category"
               className="rounded-md border px-3 py-2 text-sm"
             >
-              <option value="">Select category</option>
+              <option value="">Избери категория</option>
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -91,16 +91,16 @@ export default function AddEventPage() {
             </select>
           </div>
 
-          <Input id="imageUrl" name="imageUrl" label="Image URL" placeholder="https://..." />
+          <Input id="imageUrl" name="imageUrl" label="Снимка URL" placeholder="https://..." />
 
           {error && <p className="text-sm text-destructive">{error}</p>}
 
           <div className="flex gap-3">
             <Button type="submit" name="publish" value="true" isLoading={isLoading}>
-              Publish
+              Публикувай
             </Button>
             <Button type="submit" name="publish" value="false" variant="outline" isLoading={isLoading}>
-              Save as Draft
+              Запази като чернова
             </Button>
           </div>
         </form>

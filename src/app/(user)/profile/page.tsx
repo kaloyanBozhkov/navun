@@ -36,7 +36,7 @@ export default async function ProfilePage() {
           </h2>
           {interests.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              No events marked as interested yet.
+              Все още няма отбелязани събития.
             </p>
           ) : (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -54,11 +54,11 @@ export default async function ProfilePage() {
               Приятели ({friends.length})
             </h2>
             <Link href="/add-friend" className="text-sm text-primary hover:underline">
-              Add Friend
+              Добави приятел
             </Link>
           </div>
           {friends.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No friends yet.</p>
+            <p className="text-sm text-muted-foreground">Все още нямаш приятели.</p>
           ) : (
             <ul className="space-y-2">
               {friends.map((friend) => (

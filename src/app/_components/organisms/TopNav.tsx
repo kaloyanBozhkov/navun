@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Search, Bell, MapPin } from "lucide-react";
@@ -47,10 +48,12 @@ export const TopNav: FC<TopNavProps> = ({ className }) => {
         </button>
         <Link href="/profile">
           {session?.user?.image ? (
-            <img
+            <Image
               src={session.user.image}
               alt="Avatar"
-              className="h-8 w-8 rounded-full object-cover"
+              width={32}
+              height={32}
+              className="rounded-full object-cover"
             />
           ) : (
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground">

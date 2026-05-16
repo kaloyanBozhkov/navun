@@ -4,15 +4,12 @@ import { cn } from "@/lib/utils";
 
 const CATEGORIES = [
   { value: "", label: "Всички" },
-  { value: "music", label: "Концерти" },
-  { value: "art", label: "Изложби" },
-  { value: "food", label: "Храна & Напитки" },
-  { value: "sport", label: "Спорт" },
-  { value: "tech", label: "Технологии" },
-  { value: "party", label: "Партита" },
   { value: "nightlife", label: "Нощен живот" },
+  { value: "music", label: "Концерти" },
   { value: "weekend", label: "Уикенди" },
-  { value: "other", label: "Друго" },
+  { value: "art", label: "Изложби" },
+  { value: "sport", label: "Спорт" },
+  { value: "food", label: "Храна & Напитки" },
 ];
 
 type CategoryFilterBarProps = {

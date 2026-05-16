@@ -81,14 +81,14 @@ export default async function EventPage({
         {/* Location */}
         {event.location && (
           <div className="space-y-2">
-            <h2 className="font-semibold">Location</h2>
+            <h2 className="font-semibold">Локация</h2>
             <p className="text-muted-foreground">{event.location}</p>
           </div>
         )}
 
         {/* Business */}
         <div className="space-y-2">
-          <h2 className="font-semibold">Organized by</h2>
+          <h2 className="font-semibold">Организатор</h2>
           <Link
             href={`/profile`}
             className="inline-flex items-center gap-2 text-primary hover:underline"

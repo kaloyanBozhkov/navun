@@ -20,16 +20,16 @@ export default async function FriendsPage() {
           {/* Friends Sidebar */}
           <aside className="w-full shrink-0 space-y-3 md:w-64">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold">Friends ({friends.length})</h2>
+              <h2 className="font-semibold">Приятели ({friends.length})</h2>
               <Link href="/add-friend" className="text-sm text-primary hover:underline">
-                Add
+                Добави
               </Link>
             </div>
             {friends.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                No friends yet.{" "}
+                Все още нямаш приятели.{" "}
                 <Link href="/add-friend" className="text-primary underline">
-                  Add some!
+                  Добави!
                 </Link>
               </p>
             ) : (
@@ -56,7 +56,7 @@ export default async function FriendsPage() {
             <h1 className="text-2xl font-bold">Приятели</h1>
             {events.length === 0 ? (
               <p className="py-12 text-center text-muted-foreground">
-                No events from friends yet. Events your friends are interested in will appear here.
+                Все още няма събития от приятели. Събитията, които интересуват приятелите ти, ще се появят тук.
               </p>
             ) : (
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3">

@@ -30,7 +30,7 @@ export function AddFriendView({ incoming, outgoing, suggested }: AddFriendViewPr
     e.preventDefault();
     if (!query.trim()) return;
     startTransition(async () => {
-      const users = await searchUsers(query, "");
+      const users = await searchUsersAction(query);
       setResults(users);
       setHasSearched(true);
     });

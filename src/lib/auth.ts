@@ -77,9 +77,14 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (account && user) {
+        const dbUser = await db.user.findUnique({
+          where: { id: user.id },
+          select: { role: true },
+        });
         return {
           ...token,
           sub: user.id,
+          role: dbUser?.role ?? "USER",
         };
       }
       return token;
@@ -87,6 +92,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.sub!;
+        session.user.role = token.role as string;
       }
       return session;
     },

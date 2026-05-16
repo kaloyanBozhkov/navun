@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Input } from "@/app/_components/atoms";
-import { searchUsers } from "@/server/queries/user/searchUsers.query";
+import { searchUsersAction } from "@/server/actions/user/searchUsers.action";
 import {
   sendFriendRequestAction,
   respondFriendRequestAction,

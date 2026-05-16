@@ -116,7 +116,8 @@ export default function SignupPage() {
               </span>
               <Button
                 type="button"
-                className="mt-auto w-full bg-blue-600 hover:bg-blue-700"
+                variant="blue"
+                className="mt-auto w-full"
                 onClick={(e) => {
                   e.stopPropagation();
                   setRole("USER");
@@ -178,6 +179,7 @@ export default function SignupPage() {
 
               <Button
                 type="submit"
+                variant="blue"
                 className="w-full"
                 isLoading={isLoading}
                 disabled={!role || !email}
@@ -189,7 +191,7 @@ export default function SignupPage() {
 
           <p className="text-center text-sm text-muted-foreground">
             Вече имаш акаунт?{" "}
-            <a href="/login" className="text-primary underline">
+            <a href="/login" className="text-accent-blue underline">
               Влез
             </a>
           </p>

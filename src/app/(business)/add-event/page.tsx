@@ -223,7 +223,8 @@ export default function AddEventPage() {
 
             <Button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              variant="blue"
+              className="w-full"
               isLoading={isLoading}
             >
               + Публикувай събитие

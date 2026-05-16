@@ -130,7 +130,7 @@ export function ProfileEditor({
             error={error || undefined}
           />
           <div className="flex gap-2">
-            <Button onClick={handleSave} isLoading={isLoading}>
+            <Button variant="blue" onClick={handleSave} isLoading={isLoading}>
               Save
             </Button>
             <Button variant="ghost" onClick={() => setEditing(false)}>

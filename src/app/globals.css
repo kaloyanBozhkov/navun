@@ -46,8 +46,8 @@
     --popover: 222 31% 14%;             /* bg-card       #1A1F2E */
     --popover-foreground: 0 0% 100%;
 
-    --primary: 217 91% 60%;             /* accent-blue   #3B82F6 */
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;               /* accent-white  #FFFFFF (design: btnPrimary) */
+    --primary-foreground: 222 47% 7%;   /* bg-primary    #0A0E1A */
 
     --secondary: 222 47% 11%;           /* bg-secondary  #111827 */
     --secondary-foreground: 0 0% 100%;

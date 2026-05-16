@@ -174,7 +174,8 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              variant="blue"
+              className="w-full"
               isLoading={isLoading}
               disabled={!email}
             >
@@ -214,7 +215,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-muted-foreground">
             Няма акаунт?{" "}
-            <a href="/signup" className="text-primary underline">
+            <a href="/signup" className="text-accent-blue underline">
               Регистрирай се
             </a>
           </p>

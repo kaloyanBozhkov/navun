@@ -47,13 +47,13 @@ export function HeroEvent({ event, className }: HeroEventProps) {
             })}
           </p>
           <div className="flex items-center gap-2 pt-1">
-            <Button size="sm" className="bg-primary text-white">
+            <Button size="sm" variant="default">
               Отивам
             </Button>
             <Button
               size="sm"
               variant="outline"
-              className="border-white text-white hover:bg-white/10"
+              className="border-white/40 text-white hover:bg-white/10"
             >
               Научи повече
             </Button>

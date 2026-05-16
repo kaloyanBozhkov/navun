@@ -37,7 +37,7 @@ export function InterestButton({
     <div className="flex items-center gap-2">
       <Button
         onClick={handleToggle}
-        variant={interested ? "default" : "outline"}
+        variant={interested ? "blue" : "outline"}
         isLoading={isPending}
       >
         <Heart size={16} className="mr-2" />

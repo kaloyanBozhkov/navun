@@ -1,8 +1,25 @@
-export default function SearchPage() {
+import { searchEvents } from "@/server/queries/event/searchEvents.query";
+import { SearchView } from "@/app/_components/organisms/SearchView";
+
+export default async function SearchPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; category?: string; from?: string; to?: string }>;
+}) {
+  const params = await searchParams;
+  const events = await searchEvents({
+    query: params.q,
+    category: params.category,
+    startDate: params.from,
+    endDate: params.to,
+  });
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <h1 className="text-2xl font-bold">Search</h1>
-      <p className="mt-2 text-gray-600">Search events coming soon</p>
+    <main className="min-h-screen p-4 md:p-8">
+      <div className="mx-auto max-w-6xl space-y-6">
+        <h1 className="text-2xl font-bold">Search Events</h1>
+        <SearchView events={events} initialParams={params} />
+      </div>
     </main>
   );
 }

@@ -32,7 +32,7 @@ export function EventCard({ event }: EventCardProps) {
           {event.title}
         </h3>
         <p className="text-xs text-muted-foreground">
-          {new Date(event.starts_at).toLocaleDateString("en-GB", {
+          {new Date(event.starts_at).toLocaleDateString("bg-BG", {
             weekday: "short",
             month: "short",
             day: "numeric",

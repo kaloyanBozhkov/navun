@@ -77,7 +77,7 @@ export function EventMap({ events }: EventMapProps) {
                   {event.title}
                 </a>
                 <p className="text-xs">
-                  {new Date(event.starts_at).toLocaleDateString("en-GB", {
+                  {new Date(event.starts_at).toLocaleDateString("bg-BG", {
                     month: "short",
                     day: "numeric",
                     hour: "2-digit",

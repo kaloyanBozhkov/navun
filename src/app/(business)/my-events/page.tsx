@@ -18,7 +18,7 @@ export default async function MyEventsPage() {
     <main className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">My Events</h1>
+          <h1 className="text-2xl font-bold">Моите събития</h1>
           <Link
             href="/add-event"
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"

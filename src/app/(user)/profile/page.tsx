@@ -29,10 +29,10 @@ export default async function ProfilePage() {
           email={user.email}
         />
 
-        {/* My Interests */}
+        {/* Интереси */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold">
-            My Interests ({interests.length})
+            Интереси ({interests.length})
           </h2>
           {interests.length === 0 ? (
             <p className="text-sm text-muted-foreground">
@@ -51,7 +51,7 @@ export default async function ProfilePage() {
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">
-              Friends ({friends.length})
+              Приятели ({friends.length})
             </h2>
             <Link href="/add-friend" className="text-sm text-primary hover:underline">
               Add Friend

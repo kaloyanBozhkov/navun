@@ -69,9 +69,9 @@ export default function SignupPage() {
     <main className="flex min-h-screen flex-col items-center justify-center p-8">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Create Account</h1>
+          <h1 className="text-2xl font-bold">Навън</h1>
           <p className="mt-2 text-muted-foreground">
-            Choose your account type to get started
+            Открий най-доброто във Варна
           </p>
         </div>
 

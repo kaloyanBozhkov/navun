@@ -53,7 +53,7 @@ function MyEventRow({ event }: { event: EventItem }) {
         </Link>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span>
-            {new Date(event.starts_at).toLocaleDateString("en-GB", {
+            {new Date(event.starts_at).toLocaleDateString("bg-BG", {
               month: "short",
               day: "numeric",
             })}

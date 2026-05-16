@@ -19,7 +19,7 @@ export default async function ApprovalsPage() {
   return (
     <main className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
-        <h1 className="text-2xl font-bold">Business Approvals</h1>
+        <h1 className="text-2xl font-bold">Админ панел</h1>
         <BusinessApprovalPanel businesses={businesses} />
       </div>
     </main>

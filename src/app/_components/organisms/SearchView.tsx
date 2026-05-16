@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback } from "react";
+import { Search } from "lucide-react";
 import { Input } from "@/app/_components/atoms";
 import { Button } from "@/app/_components/atoms";
 import { CategoryFilterBar } from "@/app/_components/molecules/CategoryFilterBar";
@@ -43,17 +44,23 @@ export function SearchView({ events, initialParams }: SearchViewProps) {
 
   return (
     <div className="space-y-4">
-      <form onSubmit={handleSearch} className="flex gap-2">
-        <div className="flex-1">
+      <form onSubmit={handleSearch} className="relative flex gap-2">
+        <div className="flex-1 relative">
           <Input
             id="search"
             type="text"
-            placeholder="Search events..."
+            placeholder="Търсене на събития..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
+          <button
+            type="submit"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground md:hidden"
+          >
+            <Search className="h-5 w-5" />
+          </button>
         </div>
-        <Button type="submit">Search</Button>
+        <Button type="submit" className="hidden md:inline-flex">Търсене</Button>
       </form>
 
       <CategoryFilterBar selected={category} onSelect={handleCategoryChange} />

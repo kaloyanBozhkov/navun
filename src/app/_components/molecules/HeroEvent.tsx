@@ -32,7 +32,7 @@ export function HeroEvent({ event }: HeroEventProps) {
             </Badge>
           )}
           <span className="text-sm opacity-80">
-            {new Date(event.starts_at).toLocaleDateString("en-GB", {
+            {new Date(event.starts_at).toLocaleDateString("bg-BG", {
               weekday: "long",
               month: "long",
               day: "numeric",

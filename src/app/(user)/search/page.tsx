@@ -17,7 +17,7 @@ export default async function SearchPage({
   return (
     <main className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
-        <h1 className="text-2xl font-bold">Search Events</h1>
+        <h1 className="text-2xl font-bold">Търсене</h1>
         <SearchView events={events} initialParams={params} />
       </div>
     </main>

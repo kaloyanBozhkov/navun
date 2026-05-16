@@ -41,7 +41,7 @@ export default async function EventPage({
           </div>
           <h1 className="text-2xl font-bold md:text-3xl">{event.title}</h1>
           <p className="text-muted-foreground">
-            {new Date(event.starts_at).toLocaleDateString("en-GB", {
+            {new Date(event.starts_at).toLocaleDateString("bg-BG", {
               weekday: "long",
               year: "numeric",
               month: "long",
@@ -52,7 +52,7 @@ export default async function EventPage({
             {event.ends_at && (
               <>
                 {" — "}
-                {new Date(event.ends_at).toLocaleTimeString("en-GB", {
+                {new Date(event.ends_at).toLocaleTimeString("bg-BG", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -71,7 +71,7 @@ export default async function EventPage({
         {/* Description */}
         {event.description && (
           <div className="space-y-2">
-            <h2 className="font-semibold">About</h2>
+            <h2 className="font-semibold">За събитието</h2>
             <p className="whitespace-pre-wrap text-muted-foreground">
               {event.description}
             </p>

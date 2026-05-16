@@ -55,7 +55,7 @@ function PendingBusinessCard({ business }: { business: PendingBusiness }) {
           <span>&middot;</span>
           <span>
             Registered{" "}
-            {new Date(business.created_at).toLocaleDateString("en-GB", {
+            {new Date(business.created_at).toLocaleDateString("bg-BG", {
               month: "short",
               day: "numeric",
               year: "numeric",

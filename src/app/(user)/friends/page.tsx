@@ -53,7 +53,7 @@ export default async function FriendsPage() {
 
           {/* Friends Event Feed */}
           <div className="flex-1 space-y-4">
-            <h1 className="text-2xl font-bold">Friends&apos; Events</h1>
+            <h1 className="text-2xl font-bold">Приятели</h1>
             {events.length === 0 ? (
               <p className="py-12 text-center text-muted-foreground">
                 No events from friends yet. Events your friends are interested in will appear here.

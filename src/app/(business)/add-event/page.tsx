@@ -44,7 +44,7 @@ export default function AddEventPage() {
   return (
     <main className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-2xl space-y-6">
-        <h1 className="text-2xl font-bold">Create Event</h1>
+        <h1 className="text-2xl font-bold">Ново събитие</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input id="title" name="title" label="Title" required />

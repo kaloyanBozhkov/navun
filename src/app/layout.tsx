@@ -3,7 +3,10 @@ import { Inter } from "next/font/google";
 import { SessionProvider } from "@/providers/session-provider";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin", "cyrillic"] });
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Навън — Events in Varna",

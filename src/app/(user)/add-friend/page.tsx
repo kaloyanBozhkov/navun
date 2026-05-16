@@ -15,7 +15,7 @@ export default async function AddFriendPage() {
   return (
     <main className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-2xl space-y-8">
-        <h1 className="text-2xl font-bold">Add Friend</h1>
+        <h1 className="text-2xl font-bold">Добави приятел</h1>
         <AddFriendView incoming={incoming} outgoing={outgoing} />
       </div>
     </main>

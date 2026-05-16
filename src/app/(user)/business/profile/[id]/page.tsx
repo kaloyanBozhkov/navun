@@ -1,18 +1,21 @@
-import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth-client";
+import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { EventCard } from "@/app/_components/molecules/EventCard";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
-export default async function BusinessProfilePage() {
-  const session = await getSession();
-  if (!session?.user?.id) redirect("/login");
+type Props = {
+  params: Promise<{ id: string }>;
+};
 
-  const user = await db.user.findUnique({
-    where: { id: session.user.id },
+export default async function PublicBusinessProfilePage({ params }: Props) {
+  const { id } = await params;
+
+  const business = await db.user.findUnique({
+    where: { id, role: "BUSINESS", is_approved: true },
     include: {
       events: {
+        where: { is_published: true },
         include: {
           business: { select: { name: true, username: true } },
           _count: { select: { interests: true } },
@@ -23,9 +26,9 @@ export default async function BusinessProfilePage() {
     },
   });
 
-  if (!user || user.role !== "BUSINESS") redirect("/");
+  if (!business) notFound();
 
-  const eventCount = user._count.events;
+  const eventCount = business._count.events;
 
   return (
     <main className="min-h-screen bg-background">
@@ -40,7 +43,7 @@ export default async function BusinessProfilePage() {
         </Link>
         {/* Business logo badge */}
         <div className="absolute bottom-4 left-4 w-16 h-16 rounded-xl bg-card border-2 border-border flex items-center justify-center text-2xl font-bold text-primary z-10">
-          {user.name?.[0]?.toUpperCase() ?? "B"}
+          {business.name?.[0]?.toUpperCase() ?? "B"}
         </div>
       </div>
 
@@ -50,16 +53,9 @@ export default async function BusinessProfilePage() {
           <div className="flex-1 space-y-6">
             {/* Header info */}
             <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-xl font-bold">{user.name ?? "Бизнес"}</h1>
-                {!user.is_approved && (
-                  <span className="inline-block rounded-full bg-amber-500/10 px-3 py-0.5 text-xs font-medium text-amber-500">
-                    Очаква одобрение
-                  </span>
-                )}
-              </div>
-              {user.username && (
-                <p className="text-sm text-muted-foreground">@{user.username}</p>
+              <h1 className="text-xl font-bold">{business.name ?? "Бизнес"}</h1>
+              {business.username && (
+                <p className="text-sm text-muted-foreground">@{business.username}</p>
               )}
             </div>
 
@@ -83,19 +79,14 @@ export default async function BusinessProfilePage() {
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Предстоящи събития</h2>
-                {user.events.length > 3 && (
-                  <Link href="/my-events" className="text-sm text-primary hover:underline">
-                    Виж всички →
-                  </Link>
-                )}
               </div>
-              {user.events.length === 0 ? (
+              {business.events.length === 0 ? (
                 <p className="text-muted-foreground">
-                  Все още нямате създадени събития.
+                  Няма предстоящи събития.
                 </p>
               ) : (
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                  {user.events.slice(0, 6).map((event) => (
+                  {business.events.map((event) => (
                     <EventCard key={event.id} event={event} />
                   ))}
                 </div>
@@ -107,8 +98,8 @@ export default async function BusinessProfilePage() {
           <aside className="hidden lg:block w-64 shrink-0">
             <div className="bg-card rounded-xl border border-border p-4 space-y-2">
               <h3 className="font-semibold text-sm">Контакт</h3>
-              {user.email && (
-                <p className="text-sm text-muted-foreground">{user.email}</p>
+              {business.email && (
+                <p className="text-sm text-muted-foreground">{business.email}</p>
               )}
             </div>
           </aside>

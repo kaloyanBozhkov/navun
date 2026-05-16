@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Heart } from "lucide-react";
 import { Button } from "@/app/_components/atoms";
 import { toggleInterestAction } from "@/server/actions/event/toggleInterest.action";
 
@@ -20,14 +21,12 @@ export function InterestButton({
   const [isPending, startTransition] = useTransition();
 
   function handleToggle() {
-    // Optimistic update
     setInterested(!interested);
     setCount((c) => (interested ? c - 1 : c + 1));
 
     startTransition(async () => {
       const result = await toggleInterestAction(eventId);
       if (!result.success) {
-        // Revert on failure
         setInterested(interested);
         setCount(count);
       }
@@ -35,12 +34,16 @@ export function InterestButton({
   }
 
   return (
-    <Button
-      onClick={handleToggle}
-      variant={interested ? "default" : "outline"}
-      isLoading={isPending}
-    >
-      {interested ? "Interested" : "Mark as Interested"} ({count})
-    </Button>
+    <div className="flex items-center gap-2">
+      <Button
+        onClick={handleToggle}
+        variant={interested ? "default" : "outline"}
+        isLoading={isPending}
+      >
+        <Heart size={16} className="mr-2" />
+        {interested ? "Имам интерес" : "Имам интерес"}
+      </Button>
+      <span className="text-sm font-semibold text-muted-foreground">{count}</span>
+    </div>
   );
 }

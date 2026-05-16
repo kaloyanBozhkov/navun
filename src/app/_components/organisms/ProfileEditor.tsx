@@ -1,17 +1,34 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import { Pencil } from "lucide-react";
 import { Button } from "@/app/_components/atoms";
 import { Input } from "@/app/_components/atoms";
 import { updateProfileAction } from "@/server/actions/user/updateProfile.action";
+import { getAvatarColor } from "@/utils/avatarColor";
 
 type ProfileEditorProps = {
+  userId: string;
   initialName: string;
   initialUsername: string;
   email: string;
+  image: string | null;
+  interestCount: number;
+  friendCount: number;
+  visitedCount: number;
 };
 
-export function ProfileEditor({ initialName, initialUsername, email }: ProfileEditorProps) {
+export function ProfileEditor({
+  userId,
+  initialName,
+  initialUsername,
+  email,
+  image,
+  interestCount,
+  friendCount,
+  visitedCount,
+}: ProfileEditorProps) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(initialName);
   const [username, setUsername] = useState(initialUsername);
@@ -34,30 +51,71 @@ export function ProfileEditor({ initialName, initialUsername, email }: ProfileEd
   }
 
   return (
-    <div className="space-y-4 rounded-lg border p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="h-16 w-16 rounded-full bg-muted" />
+    <div className="space-y-4">
+      <div className="flex items-start gap-6">
+        {/* Avatar */}
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full">
+          {image ? (
+            <Image
+              src={image}
+              alt={name || "avatar"}
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div
+              className="flex h-full w-full items-center justify-center text-2xl font-bold text-white"
+              style={{ backgroundColor: getAvatarColor(userId) }}
+            >
+              {name?.[0]?.toUpperCase() ?? "?"}
+            </div>
+          )}
+        </div>
+
+        {/* Name + username + edit button */}
+        <div className="flex flex-1 items-start justify-between">
           <div>
-            {!editing ? (
+            {!editing && (
               <>
                 <h1 className="text-xl font-bold">{name || "No name set"}</h1>
                 <p className="text-muted-foreground">
                   {username ? `@${username}` : email}
                 </p>
               </>
-            ) : null}
+            )}
           </div>
+          {!editing && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1"
+              onClick={() => setEditing(true)}
+            >
+              <Pencil size={14} /> Редактирай
+            </Button>
+          )}
         </div>
-        {!editing && (
-          <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
-            Edit
-          </Button>
-        )}
       </div>
 
+      {/* Stats row */}
+      <div className="flex gap-6">
+        <div className="text-center">
+          <p className="text-lg font-bold">{interestCount}</p>
+          <p className="text-xs text-muted-foreground">Интереси</p>
+        </div>
+        <div className="text-center">
+          <p className="text-lg font-bold">{friendCount}</p>
+          <p className="text-xs text-muted-foreground">Приятели</p>
+        </div>
+        <div className="text-center">
+          <p className="text-lg font-bold">{visitedCount}</p>
+          <p className="text-xs text-muted-foreground">Посетени</p>
+        </div>
+      </div>
+
+      {/* Edit form */}
       {editing && (
-        <div className="space-y-3">
+        <div className="space-y-3 rounded-lg border p-6">
           <Input
             id="name"
             label="Display Name"

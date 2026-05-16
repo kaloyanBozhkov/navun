@@ -14,5 +14,7 @@ export async function getUserInterests(userId: string) {
     orderBy: { event: { starts_at: "asc" } },
   });
 
-  return interests.map((i) => i.event);
+  return interests;
 }
+
+export type UserInterest = Awaited<ReturnType<typeof getUserInterests>>[number];

@@ -1,8 +1,12 @@
-export default function MapPage() {
+import { getEvents } from "@/server/queries/event/getEvents.query";
+import { EventMap } from "@/app/_components/organisms/EventMap";
+
+export default async function MapPage() {
+  const events = await getEvents();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <h1 className="text-2xl font-bold">Map</h1>
-      <p className="mt-2 text-gray-600">Event map coming soon</p>
+    <main className="h-screen w-full">
+      <EventMap events={events} />
     </main>
   );
 }

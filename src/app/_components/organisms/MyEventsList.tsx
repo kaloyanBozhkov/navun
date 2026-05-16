@@ -2,166 +2,164 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { Heart, Pencil, Trash2 } from "lucide-react";
+import { Button } from "@/app/_components/atoms";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/_components/shadcn/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/app/_components/shadcn/dialog";
 import { togglePublishAction, deleteEventAction } from "@/server/actions/event/manageEvent.action";
 
 type EventItem = {
   id: string;
   title: string;
-  image_url: string | null;
   starts_at: Date;
   category: string | null;
   is_published: boolean;
+  image_url: string | null;
   _count: { interests: number };
 };
 
 type MyEventsListProps = {
-  events: EventItem[];
-  upcomingCount: number;
-  pastCount: number;
+  active: EventItem[];
+  past: EventItem[];
+  drafts: EventItem[];
 };
 
-export function MyEventsList({ events, upcomingCount, pastCount }: MyEventsListProps) {
-  const now = new Date();
-  const upcoming = events.filter((e) => new Date(e.starts_at) >= now);
-  const past = events.filter((e) => new Date(e.starts_at) < now);
-  const drafts = events.filter((e) => !e.is_published);
-
+export function MyEventsList({ active, past, drafts }: MyEventsListProps) {
   return (
-    <Tabs defaultValue="active">
-      <TabsList>
-        <TabsTrigger value="active">Активни ({upcomingCount})</TabsTrigger>
-        <TabsTrigger value="past">Минали ({pastCount})</TabsTrigger>
-        <TabsTrigger value="draft" className="hidden md:inline-flex">
-          Чернови ({drafts.length})
-        </TabsTrigger>
+    <Tabs defaultValue="active" className="space-y-4">
+      <TabsList className="w-full justify-start">
+        <TabsTrigger value="active">Активни ({active.length})</TabsTrigger>
+        <TabsTrigger value="past">Минали ({past.length})</TabsTrigger>
+        <TabsTrigger value="drafts">Чернови ({drafts.length})</TabsTrigger>
       </TabsList>
+
       <TabsContent value="active">
-        <EventList events={upcoming} emptyText="Няма активни събития." />
+        <EventList events={active} emptyText="Нямаш активни събития." />
       </TabsContent>
       <TabsContent value="past">
-        <EventList events={past} emptyText="Няма минали събития." />
+        <EventList events={past} emptyText="Нямаш минали събития." />
       </TabsContent>
-      <TabsContent value="draft">
-        <EventList events={drafts} emptyText="Няма чернови." />
+      <TabsContent value="drafts">
+        <EventList events={drafts} emptyText="Нямаш чернови." isDraft />
       </TabsContent>
     </Tabs>
   );
 }
 
-function EventList({ events, emptyText }: { events: EventItem[]; emptyText: string }) {
+function EventList({ events, emptyText, isDraft }: { events: EventItem[]; emptyText: string; isDraft?: boolean }) {
   if (events.length === 0) {
-    return <p className="py-8 text-center text-sm text-muted-foreground">{emptyText}</p>;
+    return <p className="py-12 text-center text-muted-foreground">{emptyText}</p>;
   }
   return (
-    <div className="mt-4 space-y-3">
+    <div className="space-y-3">
       {events.map((event) => (
-        <MyEventRow key={event.id} event={event} />
+        <MyEventRow key={event.id} event={event} isDraft={isDraft} />
       ))}
     </div>
   );
 }
 
-function MyEventRow({ event }: { event: EventItem }) {
+function MyEventRow({ event, isDraft }: { event: EventItem; isDraft?: boolean }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  function handleTogglePublish() {
+    startTransition(async () => {
+      await togglePublishAction(event.id);
+      router.refresh();
+    });
+  }
 
   function handleDelete() {
     startTransition(async () => {
       await deleteEventAction(event.id);
-      setShowDeleteConfirm(false);
+      setShowDeleteDialog(false);
       router.refresh();
     });
   }
 
   return (
     <>
-      <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-3">
+      <div className="flex gap-3 rounded-xl border border-border bg-card p-3">
         {/* Thumbnail */}
-        <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-muted">
-          {event.image_url && (
-            <img src={event.image_url} alt="" className="h-full w-full object-cover" />
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-muted">
+          {event.image_url ? (
+            <Image src={event.image_url} alt={event.title} fill className="object-cover" />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
+              Без снимка
+            </div>
           )}
         </div>
 
-        {/* Info */}
-        <div className="min-w-0 flex-1 space-y-1">
-          <Link href={`/event/${event.id}`} className="block text-sm font-semibold hover:text-primary line-clamp-1">
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          <Link href={`/event/${event.id}`} className="line-clamp-1 text-sm font-medium hover:underline">
             {event.title}
           </Link>
-          <p className="text-xs text-muted-foreground">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             {new Date(event.starts_at).toLocaleDateString("bg-BG", {
-              weekday: "short",
               month: "short",
               day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
+              year: "numeric",
             })}
           </p>
-          <div className="flex items-center gap-3">
+          <div className="mt-1.5 flex items-center gap-2">
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Heart size={12} />
-              {event._count.interests}
+              <Heart size={11} /> {event._count.interests}
             </span>
-            {event.is_published ? (
-              <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-500">
-                Активно
-              </span>
-            ) : (
-              <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                Чернова
-              </span>
-            )}
+            <span
+              className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                isDraft ? "bg-muted text-muted-foreground" : "bg-green-500/15 text-green-500"
+              }`}
+            >
+              {isDraft ? "Чернова" : "Активно"}
+            </span>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1 shrink-0">
-          <Link
-            href={`/event/${event.id}`}
-            className="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-muted text-muted-foreground"
-          >
-            <Pencil size={16} />
-          </Link>
+        <div className="flex shrink-0 flex-col gap-1.5">
           <button
-            onClick={() => setShowDeleteConfirm(true)}
+            onClick={handleTogglePublish}
             disabled={isPending}
-            className="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-red-500/10 text-red-500 disabled:opacity-50"
+            className="flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-xs text-muted-foreground hover:text-foreground disabled:opacity-50"
           >
-            <Trash2 size={16} />
+            <Pencil size={11} />
+            {event.is_published ? "Скрий" : "Публикувай"}
+          </button>
+          <button
+            onClick={() => setShowDeleteDialog(true)}
+            disabled={isPending}
+            className="flex items-center gap-1 rounded-lg border border-destructive/40 px-2 py-1 text-xs text-destructive hover:bg-destructive/10 disabled:opacity-50"
+          >
+            <Trash2 size={11} />
+            Изтрий
           </button>
         </div>
       </div>
 
-      {/* Delete confirmation dialog */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="mx-4 w-full max-w-sm rounded-xl bg-card border border-border p-6 space-y-4">
-            <h3 className="text-lg font-semibold">Изтриване на събитие</h3>
-            <p className="text-sm text-muted-foreground">
-              Сигурни ли сте, че искате да изтриете &ldquo;{event.title}&rdquo;? Това действие не може да бъде отменено.
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setShowDeleteConfirm(false)}
-                className="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-muted"
-              >
-                Отказ
-              </button>
-              <button
-                onClick={handleDelete}
-                disabled={isPending}
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
-              >
-                Изтрий
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Изтриване на събитие</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Сигурен ли си, че искаш да изтриеш &ldquo;{event.title}&rdquo;? Това действие е необратимо.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+              Отказ
+            </Button>
+            <Button variant="destructive" onClick={handleDelete} isLoading={isPending}>
+              Изтрий
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
